@@ -698,13 +698,7 @@ function process_file_ajax($file) {
 			
 			}
 			
-			
-			
-		
-		
-		 
-			
-			
+  			    	           	
 
  
  	       echo $var06_sigmav_dead;
@@ -854,16 +848,20 @@ echo "lENGTH";
 			$tempDepth3 = substr($tempDepth, $pos2);//gets depth 1
  
                  
-           $var_db_04_depth123 = intval(strrchr(substr($tempDepth2, 0, strpos($tempDepth2, " mm", 0)), ' '));
+           $Vardepth = intval(strrchr(substr($tempDepth2, 0, strpos($tempDepth2, " mm", 0)), ' '));
 			 echo "This is the depth <br>";
-			 echo $var_db_04_depth123;
+			 echo $Vardepth;
 			 echo "<br>";
   $var_db_04_depth123 = intval(strrchr(substr($tempDepth3, 0, strpos($tempDepth3, " mm", 0)), ' '));
 			 echo "This is the Width <br>";
 			 echo $var_db_04_depth123;
-			 echo "<br>";
-          
-        
+			 echo "<br> this is voloume mm^2";
+		 $vol=$Vardepth*$var_db_04_depth123;
+		 
+		 echo $vol;
+          echo "<br>weight per meter";
+        $WeightPerM=(24000)/$vol;
+		echo  $WeightPerM;
     //this is the one 
 	}if($decider=="12"){ //why isnt it reading it???//why do I need it up here??
  echo "got here";
@@ -1681,6 +1679,9 @@ echo "its a timber beam ec and bs code included";
 			$var_db_04_depth = Floatval(strrchr(substr($tempLength2, 0, strpos($tempLength2, " m", 0)), ' '));
 			echo "slab depth <br>";
 			echo $var_db_04_depth;
+			$WeightPerMeter=$var_db_04_depth*(.024);
+			echo "Weigth<br>";
+			echo $WeightPerMeter;
 			$var_db_04_depth = Floatval(strrchr(substr($tempLength3, 0, strpos($tempLength3, " m", 0)), ' '));
 			echo "short side <br>";
 			echo $var_db_04_depth;
@@ -1693,7 +1694,52 @@ echo "its a timber beam ec and bs code included";
 			// Length of shorter side of slabtab
 			  //Length of longer side of slabtab
 			  //Design ultimate load per unit areatab
- }elseif($decider=="5")
+ }elseif($decider=="25"){
+ echo "this is for the two way slab ec";
+ //get lx and ly load
+    $currLineIndex = 0;
+            $tempLength = "";
+			echo "<br>";
+            while (($currLineIndex < $linesExtraCount) && (strpos($linesExtra[$currLineIndex], 'slab depth') == false)) {
+                $currLineIndex++;
+            }
+			echo $currLineIndex;
+			echo $linesExtraCount;
+            if ($currLineIndex < $linesExtraCount) {
+                while (($currLineIndex < $linesExtraCount) && (strpos($linesExtra[$currLineIndex], 'mm') == false)) {
+                    $tempLength = $tempLength . $linesExtra[$currLineIndex];
+                    $currLineIndex++;
+                }
+                $tempLength = $tempLength . $linesExtra[$currLineIndex];
+            }
+			$pos1=strpos($tempLength, "slab depth", 0);
+		     $pos2=strpos($tempLength, "span of panel", 0);
+		    $pos3=strpos($tempLength, "span of panel", $pos2+strlen("span of panel"));
+			   $pos4=strpos($tempLength, "Design ultimate load",0);
+			$tempLength2 = substr($tempLength, $pos1);
+			$tempLength3 = substr($tempLength, $pos2);	
+			$tempLength4= substr($tempLength, $pos3);//here
+			 $tempLength5= substr($tempLength, $pos4);//here
+			$var_db_04_depth = Floatval(strrchr(substr($tempLength2, 0, strpos($tempLength2, " m", 0)), ' '));
+			echo "slab depth <br>";
+			echo $var_db_04_depth;
+			$WeightPerMeter=$var_db_04_depth*(.024);
+			echo "Weigth<br>";
+			echo $WeightPerMeter;
+			$var_db_04_depth = Floatval(strrchr(substr($tempLength3, 0, strpos($tempLength3, " m", 0)), ' '));
+			echo "short side <br>";
+			echo $var_db_04_depth;
+			$var_db_04_depth = Floatval(strrchr(substr($tempLength4, 0, strpos($tempLength4, " m", 0)), ' '));//dont foget to put in space before k
+			echo "long side <br>";
+			echo $var_db_04_depth;
+			$var_db_04_depth = Floatval(strrchr(substr($tempLength5, 0, strpos($tempLength5, " kN", 0)), ' '));//dont foget to put in space before k
+			echo "Design ultimate load<br>";
+			echo $var_db_04_depth;
+			// Length of shorter side of slabtab
+			  //Length of longer side of slabtab
+			  //Design ultimate load per unit areatab
+ }
+ elseif($decider=="5")
  {
  echo "one way slab ec";
 
@@ -1733,6 +1779,10 @@ echo "its a timber beam ec and bs code included";
 				$var_db_04_depth = Floatval(strrchr(substr($tempLength5, 0, strpos($tempLength5, " mm", 0)), ' '));//dont foget to put in space before k
 			echo "Slab depth <br>";
 			echo $var_db_04_depth;
+			$WeightPerM=$var_db_04_depth*(.024);
+			echo "<br> weight";
+			echo $WeightPerM;
+			
 			$pos1=strpos($tempLength, "Length of span", 0);
 			$tempWidth2 = substr($tempLength, $pos1);
 			$var_db_03_width1 = intval(strrchr(substr($tempWidth2, 0, strpos($tempWidth2, " m", 0)), ' '));
@@ -2503,6 +2553,9 @@ echo "its a timber beam ec and bs code included";
 			$No = Floatval(strrchr(substr($tempLength2, 0, strpos($tempLength2, " mm", 0)), ' '));
 			echo "Depth of slab  <br>";
 			echo $No;//it works
+			$weightperM=$No*(.024);//check this
+			echo "<br> Weighjt";
+			echo $weightperM;
 			
 			//ask about loading have a lot of factors to take into account do it later at testing
 			// Length of shorter side of slabtab
@@ -2937,7 +2990,7 @@ echo $parsed;
 }
 
  
-$procesedData = process_file_ajax('ec column.ted');
+$procesedData = process_file_ajax('tws ec.ted');
 //fix one was spanning frist thing tomoro ec 22/10/2013 //files wont work???put in .rtf at end for rich text files//Wall not working with wall change bit at top
 //note wont read end of file for rtf does for .ted
 //use .ted at end when I have teds installed to get it to work without teds just frist part of file is enough
