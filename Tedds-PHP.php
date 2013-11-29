@@ -169,6 +169,8 @@ function rtfStr2text($text) {
             case '\0': case '\r': case '\f': case '\n': break;
             // Add other data to the output stream if required.
             default:
+			//this is where the problem is
+			//to fix off set start here
                 if (rtf_isPlainText($stack[$j]))
                     $document .= $c;
                 break;
@@ -177,7 +179,7 @@ function rtfStr2text($text) {
     // Return result.
     return $document;
 }
- 
+ //error_reporting(null); If you want to ignore errors
 function msWord2Text($userDoc) {
     $iLineTeller = 0;
     $sPreviousLine = "";
@@ -214,38 +216,7 @@ function process_file_ajax($file) {
     /*
      * Begin set of variables to match.
      */
-    $var_db_01_file_type = "";
-    $var_db_02_structure_type = "";
-    $var_db_03_width = 0;
-    $var_db_04_depth = 0;
-    $var_db_04b_length = 0;
-    $var_db_05_flange_width = 0;
-    $var_db_06_flange_depth = 0;
-    $var_db_07_sigmav_permanent = 0;
-    $var_db_08_sigmav_variable = 0;
-    $var_db_09_calc_sigmav = "";
-    $var_db_10_calc_sigmah = "";
-    $var_db_11_calc_num_reactions = 0;
-    $var_db_12_material_name = "";
-    $var_db_13_mod_elasticity = 0;
-    $var_db_14_area = 0;
-    $var_db_15_volume = 0;
-    $var_db_16_density = 0;
-    $var_db_17_weight = 0;
-    $var_db_18_compression_strength = 0;
-    $var_db_19_strength_class = "";
-    $var_db_20_material2_name = "";
-    $var_db_21_area_r = 0;
-    $var_db_22_area_s = 0;
-    $var_db_23_area_sr = 0;
-    $var_db_24_area_material_2 = 0;
-    $var_db_25_volume_material_2 = 0;
-    $var_db_26_density_material_2 = 0;
-    $var_db_27_weight_material_2 = 0;
-    $var_db_28_yield_strength_material_2 = 0;
-    $var_db_29_ratio = 0;
-    $var06_sigmav_dead = "";
-    $var07_sigmav_live = "";
+   // didnt need these
 	
     /*
      * End set of variables to match.
@@ -253,24 +224,32 @@ function process_file_ajax($file) {
  
     $plainTextDocExtra = msWord2Text($file);
     $plainTextDoc = rtf2text($file);
-  //echo $plainTextDoc;
+//echo $plainTextDoc;
 	echo "got here";//Tedds calcualtion version not in retaining walls $plain text doc???"?
 	//AC1027
 	
     if (strpos($plainTextDoc, 'Tedds calculation version') !== false ||strpos($plainTextDoc, 'TEDDS calculation version') !== false||strpos($plainTextDoc, 'New Member Unique Data') !== false ||strpos($plainTextDoc, 'TEDDS calculation version') !== false || strpos($plainTextDoc, 'Retaining walls') !== false )  {//written differnetly for retaining wall
         //echo 'Number of lines: ' . substr_count($plainTextDoc, "\n") . '<br/>';
+		echo "Its a tedds";
         $lines = explode("\n", $plainTextDoc);
         $linesExtra = explode("\n", $plainTextDocExtra);//trying to get it working with master 
  echo"got here 2";
- echo $lines;
+
  //echo $linesExtra;
         $linesCount = count($lines);
         $linesExtraCount = count($linesExtra);
         $currLineIndex = 0;
-		echo $linesCount;
-		echo $LinesExtraCount;
+		
         if ($currLineIndex < $linesCount) {
  echo "got here 3";// gets here in 
+ function get_string_between($string, $start, $end){//Delect the coby of this at end
+    $string = " ".$string;
+    $ini = strpos($string,$start);
+    if ($ini == 0) return "";
+    $ini += strlen($start);
+    $len = strpos($string,$end,$ini) - $ini;
+    return substr($string,$ini,$len);
+}
             $tempVar02 = "";
             while (($currLineIndex < $linesCount) && (strpos($lines[$currLineIndex], 'RC ') == false)) {
                 $currLineIndex++;
@@ -295,7 +274,7 @@ function process_file_ajax($file) {
 			$currLineIndex=0;
 			//choseing what code to run beam pad wall etc
 		
-			$currLineIndex=0;
+			
 			while((strpos($lines[$currLineIndex], 'foundation') == false)&&($currLineIndex < $linesCount))  {
 					$currLineIndex++;
 			}
@@ -467,13 +446,21 @@ function process_file_ajax($file) {
 			echo "Category of manufacturing ";
 			 	 $decider=18;
 			 }
+			    $currLineIndex=0;
+			 while((strpos($lines[$currLineIndex], 'Masonry type') == false)&&($currLineIndex < $linesCount))  {
+					$currLineIndex++;
+			}
+			if(strpos($lines[$currLineIndex], 'Masonry type') == true){//Might need to change this//wont scan brakets??
+			echo "Double check";
+			 	 $Checker=1;
+			 }
 			      $currLineIndex=0;
 			while((strpos($lines[$currLineIndex], 'Stud breadth') == false)&&($currLineIndex < $linesCount))  {
 					$currLineIndex++;
 			}
 			if(strpos($lines[$currLineIndex], 'Stud breadth') == true){//Might need to change this//wont scan brakets??
 			echo "Stud design timber ";
-			 	 $decider=19;
+			 	 $checker=2;//pay attention to this
 			 }
 			 	 $currLineIndex=0;
 			while((strpos($lines[$currLineIndex], 'Panel height') == false)&&($currLineIndex < $linesCount))  {
@@ -653,9 +640,8 @@ function process_file_ajax($file) {
            // $var_db_03_width1 = intval(strrchr(substr($tempWidth2, 0, strpos($tempWidth2, " k", 0)), ' '));
 			echo "<br>";			
 			
-			
+
 	
-		
 
  echo"stop";
           
@@ -1096,13 +1082,48 @@ echo "lENGTH";
 		
 			echo"right here it us";
 			
+			echo"right here it us <br>";
+			 $currLineIndex = 0;//here
+            $tempWidth = "hello";
+			
+            while (($currLineIndex < $linesExtraCount) && (stristr($linesExtra[$currLineIndex], 'Section typetab') === false)) {//Wont work with a???
+                $currLineIndex++;
+				
+            }
+			echo "numbers<br>";
+			echo $currLineIndex;
+			echo $linesExtraCount;
+            if ($currLineIndex < $linesExtraCount) {
+			
+                while (($currLineIndex < $linesExtraCount) && (strpos($linesExtra[$currLineIndex], " mm") == false)) {
+                    
+					$tempWidth = $tempWidth . $linesExtra[$currLineIndex];//this varables used because of the arry bug
+                    $currLineIndex++;
+					echo "in here 2";
+                }
+				echo "Space";
+				
+				
+                $tempWidth = $tempWidth . $linesExtra[$currLineIndex];
+				
+            }
 		
-		
-		           
+            $pos1=strpos($tempWidth, "typetab", 0);
+			$tempWidth = substr($tempWidth, $pos1);
+	
+		          
 			//be hard to get the others since It wont read A there values are in temp width 2
 			echo " pause ";
                             
-           
+           	       	//in here	                
+			           
+		//be hard to get the others since It wont read A there values are in temp width 2
+		                          
+                                                                   
+														   
+$parsed = get_string_between($tempWidth, "UKB", "(Corus Advance)");
+echo "Section type<br>";
+echo $parsed;
 
  
  	       
@@ -1616,6 +1637,27 @@ echo "its a timber beam ec and bs code included";
  }elseif($decider=="4"){
  echo "this is for the two way slab bs";
  //get lx and ly load
+ $currLineIndex = 0;
+            $tempLength = "";
+			echo "<br>";
+            while (($currLineIndex < $linesExtraCount) && (strpos($linesExtra[$currLineIndex], 'depth of slab') == false)) {
+                $currLineIndex++;
+            }
+			echo $currLineIndex;
+			echo $linesExtraCount;
+            if ($currLineIndex < $linesExtraCount) {
+                while (($currLineIndex < $linesExtraCount) && (strpos($linesExtra[$currLineIndex], 'mm') == false)) {
+                    $tempLength = $tempLength . $linesExtra[$currLineIndex];
+                    $currLineIndex++;
+                }
+                $tempLength = $tempLength . $linesExtra[$currLineIndex];
+            }
+			$pos1=strpos($tempLength, "depth of slab", 0);
+			$tempLength2 = substr($tempLength, $pos1);
+			
+			$depth = Floatval(strrchr(substr($tempLength2, 0, strpos($tempLength2, " m", 0)), ' '));
+			echo "Depth of slab <br>";
+			echo $depth;
     $currLineIndex = 0;
             $tempLength = "";
 			echo "<br>";
@@ -1644,18 +1686,55 @@ echo "its a timber beam ec and bs code included";
 			$var_db_04_depth = Floatval(strrchr(substr($tempLength3, 0, strpos($tempLength3, " m", 0)), ' '));
 			echo "Long side <br>";
 			echo $var_db_04_depth;
+			echo "weight per m run long side<br>";
+			$weight=$var_db_04_depth*$depth*(.024);//ask about conversion
+			echo $weight;//ask about units
 			$var_db_04_depth = Floatval(strrchr(substr($tempLength4, 0, strpos($tempLength4, " k", 0)), ' '));//dont foget to put in space before k
 			echo "Load in kn/m2 <br>";
 			echo $var_db_04_depth;
 			// Length of shorter side of slabtab
 			  //Length of longer side of slabtab
 			  //Design ultimate load per unit areatab
+			   $currLineIndex = 0;
+            $tempLength = "";
+			echo "<br>";
+            while (($currLineIndex < $linesExtraCount) && (strpos($linesExtra[$currLineIndex], 'Number of discontinuous edges') == false)) {
+                $currLineIndex++;
+            }
+			echo $currLineIndex;
+			echo $linesExtraCount;
+            if ($currLineIndex < $linesExtraCount) {
+                while (($currLineIndex < $linesExtraCount) && (strpos($linesExtra[$currLineIndex], 'moment') == false)) {
+                    $tempLength = $tempLength . $linesExtra[$currLineIndex];
+                    $currLineIndex++;
+                }
+                $tempLength = $tempLength . $linesExtra[$currLineIndex];
+            }
+			
+			$pos1=strpos($tempLength, "	Number of discontinuous edges", 0);
+			$tempLength2 = substr($tempLength, $pos1);
+			$var_db_04_depth = Floatval(strrchr(substr($tempLength2, 0, strpos($tempLength2, " par Moment", 0)), ' '));
+			echo "Number of edges<br>";
+			echo $var_db_04_depth;
+			echo"before this check";
+			if($var_db_04_depth=="0"){
+			echo "interior";}else{
+			echo "exterior";}//come back here
  }elseif($decider=="25"){
  echo "this is for the two way slab ec";
  //get lx and ly load
-    $currLineIndex = 0;
+  
             $tempLength = "";
 			echo "<br>";
+		 $currLineIndex=0;
+			while((strpos($lines[$currLineIndex], 'Four edges continuous') == false)&&($currLineIndex < $linesCount))  {
+					$currLineIndex++;
+			}
+			if(strpos($lines[$currLineIndex], 'Four edges continuous') == true){
+			echo "hanged";
+			 $PanelType=2;
+			 }
+			 $currLineIndex = 0;
             while (($currLineIndex < $linesExtraCount) && (strpos($linesExtra[$currLineIndex], 'slab depth') == false)) {
                 $currLineIndex++;
             }
@@ -1668,6 +1747,8 @@ echo "its a timber beam ec and bs code included";
                 }
                 $tempLength = $tempLength . $linesExtra[$currLineIndex];
             }
+			echo "here it is";
+												
 			$pos1=strpos($tempLength, "slab depth", 0);
 		     $pos2=strpos($tempLength, "span of panel", 0);
 		    $pos3=strpos($tempLength, "span of panel", $pos2+strlen("span of panel"));
@@ -1694,50 +1775,11 @@ echo "its a timber beam ec and bs code included";
 			// Length of shorter side of slabtab
 			  //Length of longer side of slabtab
 			  //Design ultimate load per unit areatab
- }elseif($decider=="25"){
- echo "this is for the two way slab ec";
- //get lx and ly load
-    $currLineIndex = 0;
-            $tempLength = "";
-			echo "<br>";
-            while (($currLineIndex < $linesExtraCount) && (strpos($linesExtra[$currLineIndex], 'slab depth') == false)) {
-                $currLineIndex++;
-            }
-			echo $currLineIndex;
-			echo $linesExtraCount;
-            if ($currLineIndex < $linesExtraCount) {
-                while (($currLineIndex < $linesExtraCount) && (strpos($linesExtra[$currLineIndex], 'mm') == false)) {
-                    $tempLength = $tempLength . $linesExtra[$currLineIndex];
-                    $currLineIndex++;
-                }
-                $tempLength = $tempLength . $linesExtra[$currLineIndex];
-            }
-			$pos1=strpos($tempLength, "slab depth", 0);
-		     $pos2=strpos($tempLength, "span of panel", 0);
-		    $pos3=strpos($tempLength, "span of panel", $pos2+strlen("span of panel"));
-			   $pos4=strpos($tempLength, "Design ultimate load",0);
-			$tempLength2 = substr($tempLength, $pos1);
-			$tempLength3 = substr($tempLength, $pos2);	
-			$tempLength4= substr($tempLength, $pos3);//here
-			 $tempLength5= substr($tempLength, $pos4);//here
-			$var_db_04_depth = Floatval(strrchr(substr($tempLength2, 0, strpos($tempLength2, " m", 0)), ' '));
-			echo "slab depth <br>";
-			echo $var_db_04_depth;
-			$WeightPerMeter=$var_db_04_depth*(.024);
-			echo "Weigth<br>";
-			echo $WeightPerMeter;
-			$var_db_04_depth = Floatval(strrchr(substr($tempLength3, 0, strpos($tempLength3, " m", 0)), ' '));
-			echo "short side <br>";
-			echo $var_db_04_depth;
-			$var_db_04_depth = Floatval(strrchr(substr($tempLength4, 0, strpos($tempLength4, " m", 0)), ' '));//dont foget to put in space before k
-			echo "long side <br>";
-			echo $var_db_04_depth;
-			$var_db_04_depth = Floatval(strrchr(substr($tempLength5, 0, strpos($tempLength5, " kN", 0)), ' '));//dont foget to put in space before k
-			echo "Design ultimate load<br>";
-			echo $var_db_04_depth;
-			// Length of shorter side of slabtab
-			  //Length of longer side of slabtab
-			  //Design ultimate load per unit areatab
+			 if($PanelType=2){
+			 echo "<Br> Interior";
+			 }else{
+			 echo "Exterior";
+			 }
  }
  elseif($decider=="5")
  {
@@ -1938,7 +1980,7 @@ echo "its a timber beam ec and bs code included";
 			echo $var_db_04_depth;
 			$var_db_04_depth = Floatval(strrchr(substr($tempLength5, 0, strpos($tempLength5, " k", 0)), ' '));
 			echo "Axial load kn/n2<br>";
-			
+			echo "test";
 		//down works column 
 			echo $var_db_04_depth;
 			 
@@ -2072,260 +2114,7 @@ echo "its a timber beam ec and bs code included";
 			echo "Live load <br>";
 			echo $var_db_04_depth;
 	//mason done!		
-      }elseif($decider=="12"){ //why isnt it reading it???//why do I need it up here??
- echo "got here";
- 
-			echo "its a beam Steel";
-			echo "<br>";
-			//going in here
-            while (($currLineIndex < $linesCount) && (strpos($lines[$currLineIndex], 'Support conditions') == false)) {
-                $currLineIndex++;
-            }
-			
-			//this is a comment
-            if ($currLineIndex < $linesCount) {
-			
-                while (($currLineIndex < $linesCount) && (strpos($lines[$currLineIndex], 'Maximum') == false)) {
-                    $currLineIndex++;
-					
-                    if ((strpos($lines[$currLineIndex], 'Support A') == true) ||
-                            (strpos($lines[$currLineIndex], 'Support B') == true) ||
-                            (strpos($lines[$currLineIndex], 'Support C') == true) ||
-                            (strpos($lines[$currLineIndex], 'Support D') == true) ||
-                            (strpos($lines[$currLineIndex], 'Support E') == true) ||
-							(strpos($lines[$currLineIndex], 'Support F') == true)) {
-                        $var_db_11_calc_num_reactions++;//doesnt work in tedds for some reason
-						
-						}
-					
-                }
-            }
-			
-				echo "noOfSpans";//gets no of spans as no of reactions minis one 
-						$noOfSpans=$var_db_11_calc_num_reactions-1;
-						echo "<br>";
-						echo $noOfSpans;
-						echo "<br>";//works for bs
-						$counter=($var_db_11_calc_num_reactions*2)-1;
-						//wont work for an over hang willl give 11 for b and a anyway
-			 $currLineIndex = 0;
-            $tempWidth = "";
-            while (($currLineIndex < $linesExtraCount) && (strpos($linesExtra[$currLineIndex], 'Maximum moment ') == false)) {//try 3 equals
-                $currLineIndex++;
-				
-            }
-			echo"tester <br>";
-			echo $currLineIndex;
-			echo "<br> be here";
-			echo $linesExtraCount;
-			echo "<br>";
-            if ($currLineIndex < $linesExtraCount) {
-		
-                while (($currLineIndex < $linesExtraCount) && (strpos($linesExtra[$currLineIndex], 'k') == false)) {
-                    $tempWidth = $tempWidth . $linesExtra[$currLineIndex];
-                    $currLineIndex++;
-					echo "2";
-                }
-				
-				
-                $tempWidth = $tempWidth . $linesExtra[$currLineIndex];
-				if (strpos( $tempWidth, 'Support Asectd') == true)      //had to write them like this                    
-				          {
-                        $var_db_11_calc_num_reactions++;
-						echo "get in there a";
-						
-						}
-					if(strpos( $tempWidth, 'Support Bsectd') == true){
-				$var_db_11_calc_num_reactions++;
-						echo "get in there b";
-				}	
-				if(strpos( $tempWidth, 'Support Csectd') == true){
-				$var_db_11_calc_num_reactions++;
-						echo "get in there c";
-				}
-				if(strpos( $tempWidth, 'Support Dsectd') == true){
-				$var_db_11_calc_num_reactions++;
-						echo "get in there d";
-				}
-				if(strpos( $tempWidth, 'Support Esectd') == true){
-				$var_db_11_calc_num_reactions++;
-						echo "get in there e";
-				}
-				if(strpos( $tempWidth, 'Support Fsectd') == true){
-				$var_db_11_calc_num_reactions++;
-						echo "get in there f";
-				}
-            }
-			   //actually no of spans calculated here
-			   echo "<br>";
-						echo $var_db_11_calc_num_reactions;
-						echo "noOfSpans";
-						$noOfSpans=$var_db_11_calc_num_reactions-1;
-						echo $noOfSpans;
-						$counter=($var_db_11_calc_num_reactions*2)-1;
-			//FOR THE MOMENTS MAX
-			echo "<br>";
-			echo"tester <br>";
-			
-			echo "<br>";
-			
-			echo "<br>";
-			
-								
-			$pos1=strpos($tempWidth, "Msub s1_maxsectd", 0);
-			
-			$tempWidth = substr($tempWidth, $pos1);
-			
-			//test
-			// a trail with this one 
-			$var_db_03_width1 = floatval(strrchr(substr($tempWidth, 0, strpos($tempWidth, " rtlchfcs1 af1 ltrchfcs0 insrsid16666886 kNmsectd linex0", 0)), ' '));//works need space at start!
-			//Redo this tomoro
-			echo "Right here";
-			  echo $var_db_03_width1;
-			  echo "<br>";
-			  echo $pos1;
-			  
-			  		  
-		echo "Getting maximun moments <br>";
-			for($x=0;$x<$counter;$x++){
-			
-			$pos2=strpos($tempWidth, " Msub s{$x}_maxsectd",$pos1+strlen("Msub s1_maxsectd"));//come back here maybe do them sperately??
-			//in the steel makes it go up by one each time
-			//works !
-			//does the frist one twice come back to this
-			echo $pos2;
-			echo "<br>";
-			
-			echo "<br>";
-			$tempWidth2 = substr($tempWidth, $pos2);
-			
-		$pos1=$pos2;
-		
-		echo "<br>";
-		echo $pos2;
-			echo"this one of them";
-			 $var_db_03_width1 = floatval(strrchr(substr($tempWidth2, 0, strpos($tempWidth2, " rtlchfcs1 af1 ltrchfcs0 insrsid16666886 kNmsectd linex0", 0)), ' '));
-			  echo $var_db_03_width1;
-			  echo "<br>";
-					}
-					$pos1=strpos($tempWidth, "Msub s1_minsectd", 0);
-			
-			$tempWidth = substr($tempWidth, $pos1);
-			
-			//test
-			// a trail with this one 
-			$var_db_03_width1 = floatval(strrchr(substr($tempWidth, 0, strpos($tempWidth, " rtlchfcs1 af1 ltrchfcs0 insrsid16666886 kNmsectd linex0", 0)), ' '));//works need space at start!
-			//Redo this tomoro
-			echo "Right here";
-			  echo $var_db_03_width1;
-			  echo "<br>";
-			  echo $pos1;
-			  echo "getting min moments";
-					for($x=0;$x<$counter;$x++){
-			
-			$pos2=strpos($tempWidth, " Msub s{$x}_minsectd",$pos1+strlen("Msub s1_minsectd"));//come back here maybe do them sperately??
-			//in the steel makes it go up by one each time
-			//works !
-			//does the frist one twice come back to this
-			echo $pos2;
-			echo "<br>";
-			
-			echo "<br>";
-			$tempWidth2 = substr($tempWidth, $pos2);
-			
-		$pos1=$pos2;
-		
-		echo "<br>";
-		echo $pos2;
-			echo"this one of the mins them";
-			 $var_db_03_width1 = floatval(strrchr(substr($tempWidth2, 0, strpos($tempWidth2, " rtlchfcs1 af1 ltrchfcs0 insrsid16666886 kNmsectd linex0", 0)), ' '));
-			  echo $var_db_03_width1;
-			  echo "<br>";
-					}
-	
-		//$pos2=strpos($tempWidth, "Maximum moment",$pos1+strlen("Maximum moment"));
-		//	$pos3=strpos($tempWidth, "Maximum moment",$pos2+strlen("Maximum moment"));
-			
-         //   $tempWidth2 = substr($tempWidth, $pos1);
-			
-			
-           // $var_db_03_width1 = intval(strrchr(substr($tempWidth2, 0, strpos($tempWidth2, " k", 0)), ' '));
-			echo "<br>";			
-			
-			
-	
-		
-
- 
-            $currLineIndex = 0;//here
-            $tempWidth = "hello";
-			
-            while (($currLineIndex < $linesExtraCount) && (stristr($linesExtra[$currLineIndex], 'reaction at support a') === false)) {//Wont work with a???
-                $currLineIndex++;
-				
-            }
-			echo $currLineIndex;
-			echo $linesExtraCount;
-            if ($currLineIndex < $linesExtraCount) {
-			
-                while (($currLineIndex < $linesExtraCount) && (strpos($linesExtra[$currLineIndex], " k") == false)) {
-                    
-					$tempWidth = $tempWidth . $linesExtra[$currLineIndex];//this varables used because of the arry bug
-                    $currLineIndex++;
-					echo "in here 2";
-                }
-				echo "Space";
-				
-				
-                $tempWidth = $tempWidth . $linesExtra[$currLineIndex];
-				
-            }
-		
-            $pos1=strpos($tempWidth, " Maximum reaction at support Asectd", 0);
-			$tempWidth = substr($tempWidth, $pos1);
-			
-			$var_db_03_width1 = floatval(strrchr(substr($tempWidth, 0, strpos($tempWidth, " rtlchfcs1 af1 ltrchfcs0 insrsid16666886 k", 0)), ' '));
-			echo "frist reaction";
-			 echo $var_db_03_width1;
-			 	for($x=0;$x<$var_db_11_calc_num_reactions;$x++){
-			$pos2=strpos($tempWidth, "Maximum reaction at support ",$pos1+strlen("Maximum reaction at support "));
-			$tempWidth2 = substr($tempWidth, $pos2);
-		    $pos1=$pos2;
-		     echo "<br>";
-			echo $pos2;
-			echo"br";
-			 $var_db_03_width1 = floatval(strrchr(substr($tempWidth2, 0, strpos($tempWidth2, " rtlchfcs1 af1 ltrchfcs0 insrsid16666886 k", 0)), ' '));
-			 echo $var_db_03_width1;
-			
-			}
-			  $currLineIndex = 0;
-                $tempWidth = "";
-			//getting lengths??? try thid
-		
-			echo"right here it us";
-			
-		
-		
-		           
-			//be hard to get the others since It wont read A there values are in temp width 2
-			echo " pause ";
-                            
-           
-
- 
- 	       
-			//in here
-
-			
-          
-			
-            
-
-           
- // here for d start here on monday
-           //may have delected some thing imporant here          
-	
- }elseif($decider==11){
+      }elseif($decider==11){
  echo "Pad bs this one 11";
     $currLineIndex = 0;
             $tempLength = "";
@@ -2350,16 +2139,18 @@ echo "its a timber beam ec and bs code included";
 			$tempLength3 = substr($tempLength, $pos2);
 				$tempLength4 = substr($tempLength, $pos3);			
 			
-		   $var_db_04_depth = intval(strrchr(substr($tempLength2, 0, strpos($tempLength2, " mm", 0)), ' '));
+		   $Length = intval(strrchr(substr($tempLength2, 0, strpos($tempLength2, " mm", 0)), ' '));
 		   echo "Length of foundation<br>";
-			echo $var_db_04_depth;
-			 $var_db_04_depth = intval(strrchr(substr($tempLength3, 0, strpos($tempLength3, " mm", 0)), ' '));
+			echo $Length;
+			 $Width = intval(strrchr(substr($tempLength3, 0, strpos($tempLength3, " mm", 0)), ' '));
           	echo"Width of foundation <br>"	;		
-		   echo $var_db_04_depth;
+		   echo $Width;
 		    $var_db_04_depth = intval(strrchr(substr($tempLength4, 0, strpos($tempLength4, " mm", 0)), ' '));
           	echo"Depth of pad <br>"	;		
 		   echo $var_db_04_depth;
-		    
+		    echo"Weight<br>";
+			$weight=$Length*$var_db_04_depth*(.024);
+			echo $weight;
 		    while (($currLineIndex < $linesExtraCount) && (strpos($linesExtra[$currLineIndex], 'Total base reaction') == false)) {
                 $currLineIndex++;
             }
@@ -2736,7 +2527,7 @@ echo "its a timber beam ec and bs code included";
 			$var_db_04_depth = Floatval(strrchr(substr($tempLength4, 0, strpos($tempLength4, " kN", 0)), ' '));
 			echo "Vertical Wind load <br>";
 			echo $var_db_04_depth;
- }elseif($decider=="19")
+ }elseif($checker=="2")
 		{
 		 echo "Timeber stud design ";//need more things out???ask
 
@@ -2802,7 +2593,7 @@ echo "its a timber beam ec and bs code included";
 			   				 
  }elseif($decider=="20")
 		{
-		 echo "Masonary wall bs";//need more things out???ask
+		 echo "Masonary wall bs";//need more things out???ask//ec going in here
 
  //get lx and ly load
                  $currLineIndex = 0;//come back to this one 
@@ -2842,16 +2633,6 @@ echo "its a timber beam ec and bs code included";
 			echo "Panel height <br>";
 			echo $No;//it works
 			
-			//getting string between to sub strings//nb this code may need it again
-			//move this to top maybe
-			function get_string_between($string, $start, $end){
-    $string = " ".$string;
-    $ini = strpos($string,$start);
-    if ($ini == 0) return "";
-    $ini += strlen($start);
-    $len = strpos($string,$end,$ini) - $ini;
-    return substr($string,$ini,$len);
-}
 $parsed = get_string_between($tempLength4, ",", "srtlchfcs1 af1 ltrchfcs0");
 echo "Suppot condition one <br>";
 echo $parsed;
@@ -2946,87 +2727,23 @@ echo "Masonary type <br>";
 echo $parsed;
  }//for the lines count all code between here
  //for the lines count all code between here
- }
+ }//takes a long time in compression with tedds scanner back to beam days
+ //can be done directly with plain tect doc here????
  }
 
- 
-    $retData = array(
-        'file_name' => trim($file),
-        'file_type' => trim($var_db_01_file_type),
-        'structure_type' => trim($var_db_02_structure_type),
-        'structuretype' => trim($var_db_02_structure_type),
-        'width' => $var_db_03_width,
-        'depth' => $var_db_04_depth,
-        'length' => $var_db_04b_length,
-        'flange_width' => $var_db_05_flange_width,
-        'flange_depth' => $var_db_06_flange_depth,
-        'sigmav_permanent' => $var_db_07_sigmav_permanent,
-        'sigmav_variable' => $var_db_08_sigmav_variable,
-        'sigmav' => $var_db_09_calc_sigmav,
-        'sigmah' => $var_db_10_calc_sigmah,
-        'num_reactions' => $var_db_11_calc_num_reactions,
-        'material_name' => $var_db_12_material_name,
-        'mod_elasticity' => $var_db_13_mod_elasticity,
-        'area' => $var_db_14_area,
-        'volume' => $var_db_15_volume,
-        'density' => $var_db_16_density,
-        'weight' => $var_db_17_weight,
-        'compression_strength' => $var_db_18_compression_strength,
-        'material2_name' => $var_db_20_material2_name,
-        'strength_class' => trim($var_db_19_strength_class),
-        'area_r' => $var_db_21_area_r,
-        'area_s' => $var_db_22_area_s,
-        'area_sr' => $var_db_23_area_sr,
-        'area_material_2' => $var_db_24_area_material_2,
-        'volume_material_2' => $var_db_25_volume_material_2,
-        'density_material_2' => $var_db_26_density_material_2,
-        'weight_material_2' => $var_db_27_weight_material_2,
-        'yield_strength_material_2' => $var_db_28_yield_strength_material_2,
-        'ratio' => $var_db_29_ratio,
-		
-    );
-    return $retData;
+ //Took out array here have back up of old files saved here if you need them
 
 }
 
  
-$procesedData = process_file_ajax('tws ec.ted');
+$procesedData = process_file_ajax('Bs wall.ted');
 //fix one was spanning frist thing tomoro ec 22/10/2013 //files wont work???put in .rtf at end for rich text files//Wall not working with wall change bit at top
 //note wont read end of file for rtf does for .ted
 //use .ted at end when I have teds installed to get it to work without teds just frist part of file is enough
 //.ted gives a much higher number of offset errors
 //do pad bs
 //one way slab length not give in document 
-echo $procesedData['file_type'] . "<br/>";
-echo $procesedData['structure_type'] . "<br/>";
-echo $procesedData['width'] . "<br/>";
-echo $procesedData['depth'] . "<br/>";
-echo $procesedData['length'] . "<br/>";
-echo $procesedData['flange_width'] . "<br/>";
-echo $procesedData['flange_depth'] . "<br/>";
-echo $procesedData['sigmav_permanent'] . "<br/>";
-echo $procesedData['sigmav_variable'] . "<br/>";
-echo $procesedData['calc_sigmav'] . "<br/>";
-echo $procesedData['calc_sigmah'] . "<br/>";
-echo $procesedData['calc_num_reactions'] . "<br/>";
-echo $procesedData['material_name'] . "<br/>";
-echo $procesedData['mod_elasticity'] . "<br/>";
-echo $procesedData['area'] . "<br/>";
-echo $procesedData['volume'] . "<br/>";
-echo $procesedData['density'] . "<br/>";
-echo $procesedData['weight'] . "<br/>";
-echo $procesedData['compression_strength'] . "<br/>";
-echo $procesedData['strength_class'] . "<br/>";
-echo $procesedData['material2_name'] . "<br/>";
-echo $procesedData['area_r'] . "<br/>";
-echo $procesedData['area_s'] . "<br/>";
-echo $procesedData['area_sr'] . "<br/>";
-echo $procesedData['area_material_2'] . "<br/>";
-echo $procesedData['volume_material_2'] . "<br/>";
-echo $procesedData['density_material_2'] . "<br/>";
-echo $procesedData['weight_material_2'] . "<br/>";
-echo $procesedData['yield_strength_material_2'] . "<br/>";
-echo $procesedData['ratio'] . "<br/>";
+
 echo "end here";
 
 ?>
