@@ -1,0 +1,13 @@
+package CourseWorkn;
+
+import java.util.Comparator;
+
+private static class Comparer implements Comparator{
+
+    @Override
+    public int compare(Tockens sp1, Tockens sp2) {
+        return (sp1.price < sp2.price ) ? -1: (sp1.price > sp2.price) ? 1:0 ;
+    }
+
+
+Read more: http://javarevisited.blogspot.com/2012/01/how-to-sort-arraylist-in-java-example.html#ixzz2OgAWNmN6

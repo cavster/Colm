@@ -1,0 +1,6 @@
+package com.example.nuigmap12;
+import android.app.Activity
+import android.os.bundle;
+public class About extends Activity {
+
+}

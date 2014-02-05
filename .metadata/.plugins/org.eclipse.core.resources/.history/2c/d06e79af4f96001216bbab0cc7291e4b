@@ -1,0 +1,93 @@
+package CourseWorkn;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Scanner;
+public class Ticket implements Comparable<Ticket>{
+
+	public String getTname() {
+		return Tname;
+	}
+
+
+
+	public void setTname(String tname) {
+		Tname = tname;
+	}
+
+
+
+	public String getCname() {
+		return Cname;
+	}
+
+
+
+	public void setCname(String cname) {
+		Cname = cname;
+	}
+
+
+
+	public String getDetails() {
+		return details;
+	}
+
+
+
+	public void setDetails(String details) {
+		this.details = details;
+	}
+
+
+
+	public String getPiority() {
+		return piority;
+	}
+
+
+
+	public void setPiority(String piority) {
+		this.piority = piority;
+	}
+
+
+
+	public String getStatus() {
+		return status;
+	}
+
+
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	private String Tname;
+	private String Cname;
+	private String details;
+	private String piority;
+	private String status;
+	
+	public Ticket(String Tname,String Cname,String details,String piority,String status)
+	{
+	this.Tname=Tname;
+	this.Cname=Cname;
+	this.details=details;
+	this.piority=piority;
+	this.status=status;
+	}
+
+	
+
+	public void sendToServer(PrintWriter out){
+
+    	out.println(Tname + " " + Cname+" "+details+" "+piority+" "+status);
+	}
+	public static Ticket recieveFromClient(Scanner in){
+		Ticket s = new Ticket(in.next(),in.next(),in.next(),in.next(),in.next());
+		
+		return s;
+	}
+	}
+
+
+

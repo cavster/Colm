@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+- <resources>
+  <string name="app_name">Colm and pals</string> 
+  <string name="hello_world">Hello world!</string> 
+  <string name="menu_settings">Settings</string> 
+  <string name="map">map</string> 
+  <string name="Useful_Links">Useful Links</string> 
+  <string name="TimeTable">Time Table</string> 
+  <string name="Help">Help</string> 
+  <string name="About_Use">About Use</string> 
+  <string name="about_title">About ColmandPals app</string> 
+  <string name="about_text">Colm and pals app is a app designed my colm cavanagh and others to help frist year students find there way around the collage camous and areas and show them sustainable transport options colm cavangh Ceo of colm candPalsNuigApp is currently Mastering in a software design and develoupemt</string> 
+  </resources>

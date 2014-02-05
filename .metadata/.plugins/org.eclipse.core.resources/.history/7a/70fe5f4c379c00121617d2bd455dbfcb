@@ -1,0 +1,54 @@
+package CourseWorkn;
+import java.awt.FlowLayout;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JTextField;
+import javax.swing.JOptionPane;
+public class Gui extends JFrame{
+
+	private JTextField Tname;
+	private JTextField Cname;
+	private JTextField Details;
+	private JTextField Piority;
+	private JTextField Status;
+	private JButton Submit;
+	private JButton Print;
+	
+	public Gui(){
+	super("Ticket Fill in");
+	setLayout(new FlowLayout());
+	 Tname=new JTextField(20);
+	add(Tname);
+	 Cname=new JTextField(20);
+	add(Cname);
+	 Details=new JTextField(20);
+	add(Details);
+	 Piority=new JTextField(20);
+	add(Tname);
+	 Status=new JTextField(20);
+	add(Tname);
+	Submit=new JButton("Submit");
+	add(Submit);
+	TheListener Ears=new TheListener();
+	Tname.addActionListener(Ears);
+	Cname.addActionListener(Ears);
+	Details.addActionListener(Ears);
+	Piority.addActionListener(Ears);
+	Status.addActionListener(Ears);}
+	class TheListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			// TODO Auto-generated method stub
+			String Techname=Tname.getText();
+			String string="";
+		}
+
+	}
+}
+
+	
+

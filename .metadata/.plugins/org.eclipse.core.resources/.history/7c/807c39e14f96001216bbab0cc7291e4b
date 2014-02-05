@@ -1,0 +1,33 @@
+package CourseWorkn;
+import java.util.ArrayList;
+
+import Lab10.Person;
+public class ClientManager {
+
+	public  ArrayList<Ticket> myArray = new ArrayList<Ticket>();
+	 
+	 public void CreateArray(String Tname,String Cname,String details,String piority,String status){
+		
+		 Ticket a= new  Ticket(Tname,Cname,details,piority,status);
+		 myArray.add(a);		 
+	
+}
+
+	public ArrayList getMyArray() {
+		return myArray;
+	}
+
+	public void setMyArray(ArrayList myArray) {
+		this.myArray = myArray;
+	}
+	
+	public String printArray(){
+		System.out.println("got to printArray!");
+		String value = "";
+		for (Ticket n : myArray)
+			value+=n.getTname()+" "+n.getCname()+" "+n.getDetails()+" "+n.getPiority()+" "+n.getStatus() + "    ";//for every person in array list will perform this action
+		return value;
+		
+	}
+	 
+}

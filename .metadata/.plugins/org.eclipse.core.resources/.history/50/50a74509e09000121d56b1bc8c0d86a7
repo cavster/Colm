@@ -1,0 +1,30 @@
+package Lab10;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JTable;
+
+public class Layout extends JFrame{
+
+	/**
+	 * @param args
+	 */
+    JTable table;
+	private JLabel Sname;
+	private JLabel Address;
+	private JLabel Email;
+	
+	
+	public Layout(){
+		
+		setLayout(new FlowLayout());
+String[] columnNames={"Fname","Sname","Street","Adress","Email"};
+Object [][] data=
+	table =new JTable(data,columnNames);
+table.setPreferredScrollableViewportSize(new Dimension(500,50));
+table.setFillsViewportHeight(true);
+JScrollPane scrollPain
+	}
+
+}

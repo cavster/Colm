@@ -1,0 +1,56 @@
+package CourseWorkn;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Scanner;
+import javax.imageio.IIOException;
+public class ServerPower {
+
+	
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) throws IOException {
+		ServerSocket server = new ServerSocket(8888);
+		ArrayList<String> Tockens=new ArrayList<String>();
+		System.out.println("Server running. Waiting for clients to connect...");
+		 BufferedWriter out12 = new BufferedWriter(new FileWriter("Record.txt"));
+		while(true) {
+
+			Socket s = server.accept();
+			
+			System.out.println("Client connected");
+
+			myServiceClass service = new myServiceClass(s,Tockens); // instantiate the task class
+			
+			//service.run();
+			
+			
+			Thread t = new Thread(service);  // instantiate the thread with the task class object
+			
+			t.start();  // start the client-handling thread 
+
+		}
+	
+		
+		public void WriteToFile(String Tname;String Cname;String details;String piority;String status){
+			out12.write(Tname);
+			out12.write(",");
+			out12.write(Cname);
+			out12.write(",");
+			out12.write(details);
+			out12.write(",");
+			out12.write(piority);
+			out12.write(",");
+			out12.write(status);
+			out12.write(",");
+		}
+	}
+}
+

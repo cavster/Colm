@@ -1,0 +1,63 @@
+package Lab10;
+
+import java.awt.Dimension;
+import java.io.BufferedReader;
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.Arrays;
+import java.util.Scanner;;
+public class Demo {
+
+	/**
+	 * @param args
+	 * @throws FileNotFoundException 
+	 */
+	public static void main(String[] args) throws FileNotFoundException {
+		
+		PersonArray PeopleDetail=new PersonArray();
+		Scanner s=null;
+	
+		MyTable model = new MyTable();
+		try{
+		s= new Scanner(new BufferedReader(new FileReader("txtfile.csv")));//reads in text file
+		s.useDelimiter(",");//seperates by the , 
+			while(s.hasNext()){//while there is still words will continnu to create array of type person
+			String Fname=s.next();//saves them as varables
+			String Lname=s.next();
+			String Street=s.next();
+			String HouseNumber=s.next();
+			String City=s.next();
+			String email=s.next();			
+			PeopleDetail.CreateArray(Fname, Lname, Street,HouseNumber,City ,email);//creates array
+			model.addRow(Arrays.asList(Fname,Lname,Street,HouseNumber,City,email));//adds row into model
+				
+			}}
+		finally{if(s!=null)//whens its finished will print array
+		
+		PeopleDetail.printArray();
+
+	    
+
+	    
+
+	    JTable table = new JTable(model);
+	    table.setPreferredScrollableViewportSize(new Dimension(5000, 700));
+	    table.setFillsViewportHeight(true);
+
+	    JScrollPane scrollPane = new JScrollPane(table);
+	    scrollPane.setBounds(5, 218, 884, 194);
+	    //now adding this to the frame where I want to show 
+	    JFrame frame = new JFrame();
+	    frame.add(scrollPane);
+	    frame.setVisible(true);
+	    s.close();
+		}
+		
+	}
+
+}
+

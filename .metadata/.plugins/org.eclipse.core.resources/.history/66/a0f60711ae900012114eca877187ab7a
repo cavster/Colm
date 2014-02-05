@@ -1,0 +1,43 @@
+package Lab10;
+import Num;
+
+import java.util.ArrayList;
+
+
+public class PersonArray {
+
+	 private static ArrayList<Person> ArrayPerson = new ArrayList<Person>();
+
+	 String value="null";
+	 public void CreateArray(String Fname,String Lname,String Address,String Email){
+		
+		 Person a= new Person(Fname,Lname,Address,Email);
+		 ArrayPerson.add(a);
+	
+	 }
+	 
+	 @Override
+	 public String toString(){	 
+		 return ArrayPerson.toString(); 
+	 }
+	 
+	//loop through all elements of arry
+		 //in the loop - send in each element for printing
+	 
+	
+		
+
+	public void printArray(){
+		for (Person n : ArrayPerson)
+			System.out.println(n.getFname()+n.getLname()+n.getAddress()+n.getEmail());
+	}
+	}
+
+	
+	 
+	 
+	 
+
+	
+
+

@@ -1,0 +1,14 @@
+package StringCompare;
+
+public class StringTestCompare 
+{
+	String wordOne;
+	String wordTwo;
+	public boolean StringTestCompare() 
+	{
+	
+		Boolean test=wordOne.equals(wordTwo);
+		return true;
+	}
+	}
+	

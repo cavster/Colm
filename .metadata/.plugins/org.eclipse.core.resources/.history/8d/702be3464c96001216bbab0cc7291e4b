@@ -1,0 +1,103 @@
+package CourseWorkn;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.io.IOException;
+import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
+
+public class myServiceClass implements Runnable  {
+	
+	ClientManager cm=new ClientManager();
+		private Socket s;
+		private Scanner in;
+		private PrintWriter out;
+		ArrayList<String> Tockens;//=new ArrayList<String>();
+		
+		
+		myServiceClass(Socket s,ArrayList<String> Tockens) {
+			this.s = s;
+			this.Tockens=Tockens;
+		}
+
+		public void run() {
+			try {
+				try {
+					in = new Scanner(s.getInputStream());
+					out = new PrintWriter(s.getOutputStream());
+					doService(); // the actual service            
+				} finally {
+					s.close();
+				}
+			} catch (IOException exception) {
+				exception.getMessage();
+			}
+		}
+
+		public void doService() throws IOException {
+			while(true) {
+				if(!in.hasNext()){
+					return;}
+				String request = in.next();
+				System.out.println("Request received got it: " + request);
+				StringTokenizer st = new StringTokenizer(request);
+			    
+				if(request.equals("Quit")){ // ends connection to this client (not to other clients)
+					return;}
+				else{
+					
+					handleRequest(request);}
+			}
+		}
+
+		public void handleRequest(String request) {
+			
+			
+		if(request.equals("Submit")){
+			 String Tname=in.next();
+			 String Cname=in.next();
+			 String details=in.next();
+			 String piority=in.next();
+			 String status=in.next();
+			 out12.write(Tname);
+				out12.write(",");
+				out12.write(Cname);
+				out12.write(",");
+				out12.write(details);
+				out12.write(",");
+				out12.write(piority);
+				out12.write(",");
+				out12.write(status);
+				out12.write(",");
+			 
+			cm.CreateArray(Tname, Cname, details, piority, status);
+			String R="Person added to array";
+			
+			 out.println(R);
+			 out.flush();
+			 System.out.println("got it ladies: " + request);
+			 
+			}
+		else if(request.equals("Print")){
+			
+			String Responce=cm.printArray();
+			
+			out.println(Responce);
+			out.flush();
+			
+		}
+		
+		else{
+			System.out.println("Unknown request!");
+			  String Responce="fuck off";
+			  out.println(Responce);
+			out.flush();
+		}
+
+		}
+
+}

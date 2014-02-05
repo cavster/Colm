@@ -1,0 +1,115 @@
+package CourseWorkn;
+
+
+
+import java.awt.Dimension;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.util.Scanner;
+
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+
+import Lab10.MyTable;
+
+public class Client {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) throws IOException
+	{
+		Socket s=new Socket("localhost",8888);
+		InputStream instream=s.getInputStream();
+		OutputStream outstream=s.getOutputStream();
+		Scanner input=new Scanner(System.in);
+		Scanner in=new Scanner(instream);
+		PrintWriter out=new PrintWriter(outstream,true);
+		MyTable model = new MyTable();
+		int choice=1;
+
+		
+
+		while (choice!=-1){ 	
+			System.out.println("Enter choice ");
+			choice=Integer.parseInt(input.nextLine());
+
+			if(choice==1){
+
+				String submit="Submit";
+				System.out.println("enter name of Reporting Techniction ");
+				String nameTech =input.nextLine();
+				System.out.println("enter name of Customor ");
+				String nameCustomor =input.nextLine();
+				System.out.println("enter Details of report ");
+				String reportDetails=input.nextLine();
+				System.out.println("enter Priority ");
+				String priotiry=input.nextLine();
+				System.out.println("enter Status of issue ");
+				String status=input.nextLine();
+				
+			
+				String r =submit+"\n"+nameTech+"\n"+nameCustomor+"\n"+reportDetails+"\n"+priotiry+"\n"+status+"\n";
+				out.print(r);//sending in String to server as stream
+				
+				System.out.println("sending"+submit+" "+nameTech+" "+nameCustomor+" "+reportDetails+" "+priotiry+" "+status);
+
+				out.flush();
+
+				String R=in.nextLine();//problem here ask in disc
+
+
+
+				System.out.println("Got it from server "+R+"\n\n");
+			}
+			else if(choice==2){
+			
+				String a="Print\n";
+				System.out.println(a);
+
+				out.print(a);
+				out.flush();
+				String c=in.nextLine();//ask about this in disc
+				
+				System.out.println("Got it from server "+c);	
+				model.addRow("colm"+"dave"+"katie"+"123"+"Sloved");
+				JTable table = new JTable(model);
+			    table.setPreferredScrollableViewportSize(new Dimension(5000, 7000));
+			    table.setFillsViewportHeight(true);
+
+			    JScrollPane scrollPane = new JScrollPane(table);
+			    scrollPane.setBounds(5, 218, 884, 194);
+			    //now adding this to the frame where I want to show 
+			    JFrame frame = new JFrame();
+			    frame.setSize(1000,1000);//setting size
+			    frame.add(scrollPane);
+			    frame.setVisible(true);
+			    s.close();
+			}
+		}
+
+
+
+		System.out.println("ending client");
+		in.close();
+		s.close();
+		input.close();
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,34 @@
+package CourseWorkn;
+
+
+	import java.awt.Color;
+import java.awt.Container;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+
+import javax.swing.*;
+	public class MyFrame extends JFrame {
+	MyFrame() { 
+	super("Frame Title");
+	setSize(400, 300); // initial window size
+	setDefaultCloseOperation( // what happens if 
+	//user clicks on the close icon:
+	JFrame.EXIT_ON_CLOSE); // kill frame
+	
+	Container c = getContentPane();
+	c.setLayout(new GridLayout(12, 2, 5, 5));
+	// Add labels and text fields to a container:
+	c.add(new JLabel("First Name"));
+	c.add(new JTextField(8));
+	c.add(new JLabel("MI"));
+	c.add(new JTextField(1));
+	c.add(new JLabel("Last Name"));
+	c.add(new JTextField(8));
+	c.setBackground(Color.ORANGE);
+	c.setLayout(new FlowLayout()); 
+	c.add(new JLabel("Hi there!"));
+	c.add(new JButton("Click me"));
+	c.add(new JButton("OK"));
+	setVisible(true); // makes the frame visible
+	}
+}

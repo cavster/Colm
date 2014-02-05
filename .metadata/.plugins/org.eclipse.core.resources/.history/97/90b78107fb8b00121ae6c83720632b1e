@@ -1,0 +1,31 @@
+package CourseWorkn;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+public class Ticket {
+
+	private String Tname;
+	private String Cname;
+	private String details;
+	private int piority;
+	private String status;
+	
+	public Ticket(String Tname,String Cname,String details,int piority,String status)
+	{
+	this.Tname=Tname;
+	this.Cname=Cname;
+	this.details=details;
+	this.piority=piority;
+	this.status=status;
+	}
+
+	
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	public void sendToSever(PrintWriter out){
+
+    	out.print(Tname + " " + Cname+" "+details+" "+piority+""+status);
+	}
+}
+
+

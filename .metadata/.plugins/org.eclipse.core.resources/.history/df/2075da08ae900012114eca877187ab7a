@@ -1,0 +1,43 @@
+package Lab10;
+
+import java.io.BufferedReader;
+import javax.swing.JFrame;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.Scanner;;
+public class Demo {
+
+	/**
+	 * @param args
+	 * @throws FileNotFoundException 
+	 */
+	public static void main(String[] args) throws FileNotFoundException {
+		
+		PersonArray PeopleDetail=new PersonArray();
+		Scanner s=null;
+		String K=null;
+		
+		try{
+		s= new Scanner(new BufferedReader(new FileReader("txtfile.csv")));
+		s.useDelimiter(",");
+			while(s.hasNext()){
+			String Fname=s.next();
+			String Lname=s.next();
+			String Address=s.next();
+			String email=s.next();			
+			PeopleDetail.CreateArray(Fname, Lname, Address, email);
+			
+				System.out.println(Fname+Lname+Address+email);
+			}}
+		finally{if(s!=null)
+		
+		PeopleDetail.print
+					
+			s.close();	
+		
+		}
+		
+	}
+
+}
+

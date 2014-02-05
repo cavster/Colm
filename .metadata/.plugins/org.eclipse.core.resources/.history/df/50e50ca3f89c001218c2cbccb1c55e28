@@ -1,0 +1,25 @@
+package CourseWorkn;
+
+
+	import java.awt.Color;
+import java.awt.Container;
+import java.awt.FlowLayout;
+
+import javax.swing.*;
+	public class MyFrame extends JFrame {
+	MyFrame() { 
+	super("Frame Title");
+	setSize(400, 300); // initial window size
+	setDefaultCloseOperation( // what happens if 
+	//user clicks on the close icon:
+	JFrame.EXIT_ON_CLOSE); // kill frame
+	Container content = getContentPane();
+	content.add(new JLabel("First Name"));
+	content.add(new JTextField(8));
+	content.add(new JLabel("MI"));
+	content.add(new JTextField(1));
+	content.add(new JLabel("Last Name"));
+	content.add(new JTextField(8));
+	setVisible(true); // makes the frame visible
+	}
+}

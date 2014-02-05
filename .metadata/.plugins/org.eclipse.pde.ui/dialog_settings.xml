@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="FeatureImportWizard">
+		<item value="false" key="notbinary"/>
+		<item value="" key="droplocation1"/>
+		<item value="C:\Program Files\eclipse" key="droplocation0"/>
+		<item value="false" key="doother"/>
+	</section>
+</section>

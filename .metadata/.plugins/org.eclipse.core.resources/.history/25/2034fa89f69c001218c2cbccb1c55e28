@@ -1,0 +1,99 @@
+package CourseWorkn;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JTextField;
+import javax.swing.JOptionPane;
+public class Gui extends JFrame{
+
+	private JTextField Tname;
+	private JTextField Cname;
+	private JTextField Details;
+	
+	private JButton Submit;
+	private JButton Print;
+	private JRadioButton Pone;
+	private JRadioButton Ptwo;
+	private JRadioButton Pthree;
+	private JRadioButton Pfour;
+	private JRadioButton Pfive;
+	private ButtonGroup PrioityGroup;
+	private JRadioButton solved;
+	private JRadioButton unsolved;
+	private ButtonGroup Status;
+	public Gui(){
+	super("Ticket Fill in");
+	JFrame frame=new JFrame("grid layout");
+	
+	 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+     frame.setSize(1000,1000);
+    frame.setVisible(true);
+	JPanel panel=new JPanel(); 
+	panel.setLayout(new GridLayout(3, 2, 5, 5));
+	setLayout(new FlowLayout());
+	panel.add(new JLabel("Tech Name"));
+	 Tname=new JTextField(20);
+	panel.add(Tname);
+	panel.add(new JLabel("Customor Name"));
+	 Cname=new JTextField(20);
+	panel.add(Cname);
+	panel.add(new JLabel("Detail"));
+	 Details=new JTextField(20);
+	panel.add(Details);
+	
+	Submit=new JButton("Submit");
+	add(Submit);
+	Print=new JButton("Print");
+	add(Print);
+	Pone=new JRadioButton("1",false);
+	Ptwo=new JRadioButton("2",false);
+	Pthree=new JRadioButton("3",true);
+	Pfour=new JRadioButton("4",false);
+	Pfive=new JRadioButton("5",false);
+	add(Pone);
+	add(Ptwo);
+	add(Pthree);
+	add(Pfour);
+	add(Pfive);
+	PrioityGroup=new ButtonGroup();
+	PrioityGroup.add(Pone);
+	PrioityGroup.add(Ptwo);
+	PrioityGroup.add(Pthree);
+	PrioityGroup.add(Pfour);
+	PrioityGroup.add(Pfive);
+	solved=new JRadioButton("Solved",false);
+	unsolved=new JRadioButton("Unsolved",true);
+	add(solved);
+	add(unsolved);
+	Status=new ButtonGroup();
+	Status.add(solved);
+	Status.add(unsolved);
+	TheListener Ears=new TheListener();
+	Tname.addActionListener(Ears);
+	Cname.addActionListener(Ears);
+	Details.addActionListener(Ears);
+	Submit.addActionListener(Ears);
+	Print.addActionListener(Ears);}
+	
+	class TheListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			// TODO Auto-generated method stub
+			String Techname=Tname.getText();
+			String string="";
+		}
+
+	}
+}
+
+	
+

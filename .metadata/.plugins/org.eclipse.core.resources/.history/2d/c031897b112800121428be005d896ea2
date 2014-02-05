@@ -1,0 +1,18 @@
+package StringCompare;
+
+public class StringTestCompare {
+
+	public StringTestCompare() {
+		String wordOne;
+		String wordTwo;
+		String var1;
+		if(wordOne.equals(wordTwo)){
+		System.out.p		
+	}
+
+	/**
+	 * @param args
+	 */
+
+	}}
+

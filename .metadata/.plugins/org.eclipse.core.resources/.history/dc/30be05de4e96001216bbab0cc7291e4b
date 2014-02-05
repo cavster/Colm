@@ -1,0 +1,100 @@
+package CourseWorkn;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.util.Scanner;
+
+public class Client {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) throws IOException
+	{
+		Socket s=new Socket("localhost",8888);
+		InputStream instream=s.getInputStream();
+		OutputStream outstream=s.getOutputStream();
+		Scanner input=new Scanner(System.in);
+		Scanner in=new Scanner(instream);
+		PrintWriter out=new PrintWriter(outstream);
+		BufferedWriter out12 = new BufferedWriter(new FileWriter("Record.txt"));
+		int choice=1;
+
+		ClientManager b=new ClientManager();
+
+		while (choice!=-1){ 	
+			System.out.println("Enter choice ");
+			choice=Integer.parseInt(input.nextLine());
+
+			if(choice==1){
+
+				String submit="Submit";
+				System.out.println("enter name of Reporting Techniction ");
+				String nameTech =input.nextLine();
+				System.out.println("enter name of Customor ");
+				String nameCustomor =input.nextLine();
+				System.out.println("enter Details of report ");
+				String reportDetails=input.nextLine();
+				System.out.println("enter Priority ");
+				String priotiry=input.nextLine();
+				System.out.println("enter Status of issue ");
+				String status=input.nextLine();
+
+
+				out12.write(nameTech);
+				out12.write(",");
+				out12.write(nameCustomor);
+				out12.write(",");
+				out12.write(reportDetails);
+				out12.write(",");
+				out12.write(priotiry);
+				out12.write(",");
+				out12.write(status);
+				out12.write(",");
+				String r =submit+" "+nameTech+" "+nameCustomor+" "+reportDetails+" "+priotiry+" "+status+" ";
+				out.print(r);//sending in String to server as stream
+				System.out.println("sending"+submit+" "+nameTech+" "+nameCustomor+" "+reportDetails+" "+priotiry+" "+status);
+
+				out.flush();
+
+				String R=in.nextLine();//problem here ask in disc
+
+
+
+				System.out.println("Got it from sever "+R+"/n/n");
+			}
+			else if(choice==2){
+			
+				String a="Print \n";
+				out.print(a);
+				out.flush();
+				String c=in.nextLine();
+				System.out.println("Got it from sever "+c);	   
+			}
+		}
+
+
+
+		System.out.println("ending client");
+		out12.close();
+		s.close();
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,34 @@
+package StringCompare;
+
+import java.util.Scanner;
+
+public class StringCompareTest 
+{
+
+	public StringCompareTest() {
+		// TODO Auto-generated constructor stub
+	}
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		String wordOne;
+		String wordTwo;
+
+		Scanner input=new Scanner(System.in);
+		System.out.println("Please enter frist string");
+		wordOne=input.nextLine();
+		System.out.println("please enter second string");
+		wordTwo=input.nextLine();
+		StringTestCompare cal= new StringTestCompare();
+		if(true){
+			System.out.println("Strings"+wordOne+"&"+wordTwo+"are equal");
+
+		}
+		else{
+			System.out.println("Strings"+wordOne+"&"+wordTwo+"are not equal");
+		}
+	}
+}
+
